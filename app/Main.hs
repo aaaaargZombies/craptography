@@ -1,6 +1,12 @@
 module Main (main) where
 
-import Crapto (someFunc)
+import Crapto
 
 main :: IO ()
-main = someFunc
+main = interactiveLines
+
+interactiveLines :: IO ()
+interactiveLines = do
+  line <- getLine
+  putStrLn (rotFib line)
+  interactiveLines

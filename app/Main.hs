@@ -46,14 +46,16 @@ parseArguments (x : xs) opts = parseArguments xs $ updateOpts x xs opts
 
 main :: IO ()
 main = do
-  args <- getArgs -- can use this to decide if I stdin or file
-  if "-h" `elem` args then printHelpText "" else interactiveLines
+  args <- getArgs
+  interactiveLines $ parseArguments args defaultOpts
 
-interactiveLines :: IO ()
-interactiveLines = do
+interactiveLines :: Opts -> IO ()
+interactiveLines opts = do
   line <- getLine
-  putStrLn (rotFib line)
-  interactiveLines
+  if decrapt opts
+    then putStrLn (unRotFib line)
+    else putStrLn (rotFib line)
+  interactiveLines opts
 
 printHelpText :: String -> IO ()
 printHelpText msg = do

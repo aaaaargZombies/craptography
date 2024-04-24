@@ -3,12 +3,6 @@ module Main (main) where
 import Crapto
 import System.Environment
 
--- data Arg a
---   = Help
---   | Decrapt
---   | InFile String
---   | OutFile String
-
 data Opts = Opts
   { inFile :: Maybe String
   , outFile :: Maybe String
@@ -21,11 +15,34 @@ defaultOpts :: Opts
 defaultOpts = Opts{help = False, decrapt = False, inFile = Nothing, outFile = Nothing}
 
 -- I probably want to fold the list of args and update the defaultOpts
-parseArguments :: [String] -> Opts
-parseArguments args
-  | null args = defaultOpts
-  | "-h" `elem` args || "--help" `elem` args = Opts{help = False, decrapt = False, inFile = Nothing, outFile = Nothing}
-  | otherwise = Opts{help = False, decrapt = False, inFile = Nothing, outFile = Nothing}
+parseArguments :: [String] -> Opts -> Opts
+parseArguments [] opts = opts
+parseArguments (x : xs) opts = parseArguments xs $ updateOpts x xs opts
+ where
+  updateOpts :: String -> [String] -> Opts -> Opts
+  updateOpts x xs opts =
+    case x of
+      "-h" -> opts{help = True}
+      "--help" -> opts{help = True}
+      "-i" ->
+        case xs of
+          [] -> opts
+          (f : _) -> opts{inFile = Just f}
+      "--input" ->
+        case xs of
+          [] -> opts
+          (f : _) -> opts{inFile = Just f}
+      "-o" ->
+        case xs of
+          [] -> opts
+          (f : _) -> opts{outFile = Just f}
+      "--output" ->
+        case xs of
+          [] -> opts
+          (f : _) -> opts{outFile = Just f}
+      "-d" -> opts{decrapt = True}
+      "--decrapt" -> opts{decrapt = True}
+      _ -> opts
 
 main :: IO ()
 main = do
@@ -45,7 +62,7 @@ printHelpText msg = do
   putStrLn (" Usage: " ++ progName ++ " <options>")
   putStrLn "\n"
   putStrLn " Options:"
-  putStrLn "   --decapt | -d        - Runs the encraption in reverse"
+  putStrLn "   --decrapt | -d        - Runs the encraption in reverse"
   putStrLn "   --input  | -i        - Path to file you would like to encrapt"
   putStrLn "            :             if not specified reads from stdin"
   putStrLn "   --output | -o        - Path to file you would like to the write result"

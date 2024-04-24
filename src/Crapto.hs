@@ -1,5 +1,6 @@
 module Crapto where
 
+import qualified Data.Foldable as S
 import Data.Function ((&))
 import qualified Data.List as L
 import qualified Data.Sequence as S
@@ -67,17 +68,17 @@ rotFib msg =
   msg
     & S.fromList
     & S.mapWithIndex (\n c -> rotFibChar (n + 1) c)
-    & show -- TODO this is bad  "fromList \"cqm\""
+    & foldr (:) ""
 
 unRotFib :: String -> String
 unRotFib msg =
   msg
     & S.fromList
     & S.mapWithIndex (\n c -> rotFibChar ((-n) - 1) c)
-    & show -- TODO this is bad  "fromList \"cqm\""
+    & foldr (:) ""
 
 fib :: Int -> Int
-fib n = f n
+fib = f
  where
   f n =
     case compare n 0 of

@@ -1,7 +1,9 @@
 module Main (main) where
 
 import Crapto
+import Data.Function ((&))
 import System.Environment
+import GHC.Float (integerToDouble#)
 
 data Opts = Opts
   { inFile :: Maybe String
@@ -44,18 +46,59 @@ parseArguments (x : xs) opts = parseArguments xs $ updateOpts x xs opts
       "--decrapt" -> opts{decrapt = True}
       _ -> opts
 
+-- TODO
+-- trouble reading from stdin to file
+--
+-- test.txt ==
+-- ```
+-- apl
+-- this is a test 
+-- ```
+-- 
+-- running `cat test.txt | stack run -- -o testOut.txt` produces 
+--
+-- testOut.txt ==
+-- ```
+-- bqnuikv qf i esrg% 
+-- ```
+--
+-- needs a new line and someway to finnish the file?
+
 main :: IO ()
 main = do
   args <- getArgs
-  interactiveLines $ parseArguments args defaultOpts
+  let opts = parseArguments args defaultOpts
+      rotate = if opts & decrapt then unRotFib else rotFib
+  case opts & inFile of
+    Nothing ->
+      ( case opts & outFile of
+          Nothing -> interactiveLines rotate
+          Just o -> do
+            line <- getLine
+            writeFile o (rotate line)
+            interactiveLinesAppend rotate o
+      )
+    Just i ->
+      ( case opts & outFile of
+          Nothing -> do
+            fileContent <- readFile i
+            putStrLn (rotate fileContent)
+          Just o -> do
+            fileContent <- readFile i
+            writeFile o (rotate fileContent)
+      )
 
-interactiveLines :: Opts -> IO ()
-interactiveLines opts = do
+interactiveLines :: (String -> String) -> IO ()
+interactiveLines cipher = do
   line <- getLine
-  if decrapt opts
-    then putStrLn (unRotFib line)
-    else putStrLn (rotFib line)
-  interactiveLines opts
+  putStrLn (cipher line)
+  interactiveLines cipher
+
+interactiveLinesAppend :: (String -> String) -> String -> IO ()
+interactiveLinesAppend cipher outputFile = do
+  line <- getLine
+  appendFile outputFile (cipher line)
+  interactiveLinesAppend cipher outputFile
 
 printHelpText :: String -> IO ()
 printHelpText msg = do

@@ -1,9 +1,9 @@
 module Main (main) where
 
+import Control.Exception
 import Crapto
 import Data.Function ((&))
 import System.Environment
-import GHC.Float (integerToDouble#)
 
 data Opts = Opts
   { inFile :: Maybe String
@@ -52,17 +52,27 @@ parseArguments (x : xs) opts = parseArguments xs $ updateOpts x xs opts
 -- test.txt ==
 -- ```
 -- apl
--- this is a test 
+-- this is a test
 -- ```
--- 
--- running `cat test.txt | stack run -- -o testOut.txt` produces 
+--
+-- running `cat test.txt | stack run -- -o testOut.txt` produces
 --
 -- testOut.txt ==
 -- ```
--- bqnuikv qf i esrg% 
+-- bqnuikv qf i esrg%
 -- ```
 --
--- needs a new line and someway to finnish the file?
+-- someway to detect end of file?
+--
+-- TODO 2
+--
+-- I also need to decide how I'm going to encode/decode from std in
+-- currently I restart on each line so there's a diference between
+-- readinf from a file and stdin
+--
+-- I'm continuing to increment fib sequence on non Alphabet words
+-- so will need to watch for that in the difference as we'll loose
+-- the '\n' on stdin
 
 main :: IO ()
 main = do
@@ -97,7 +107,7 @@ interactiveLines cipher = do
 interactiveLinesAppend :: (String -> String) -> String -> IO ()
 interactiveLinesAppend cipher outputFile = do
   line <- getLine
-  appendFile outputFile (cipher line)
+  appendFile outputFile $ "\n" <> (cipher line)
   interactiveLinesAppend cipher outputFile
 
 printHelpText :: String -> IO ()

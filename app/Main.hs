@@ -3,6 +3,7 @@ module Main (main) where
 import Control.Exception
 import Crapto
 import Data.Function ((&))
+import GHC.IO.Handle (isEOF)
 import System.Environment
 
 data Opts = Opts
@@ -47,24 +48,6 @@ parseArguments (x : xs) opts = parseArguments xs $ updateOpts x xs opts
       _ -> opts
 
 -- TODO
--- trouble reading from stdin to file
---
--- test.txt ==
--- ```
--- apl
--- this is a test
--- ```
---
--- running `cat test.txt | stack run -- -o testOut.txt` produces
---
--- testOut.txt ==
--- ```
--- bqnuikv qf i esrg%
--- ```
---
--- someway to detect end of file?
---
--- TODO 2
 --
 -- I also need to decide how I'm going to encode/decode from std in
 -- currently I restart on each line so there's a diference between
@@ -84,9 +67,13 @@ main = do
       ( case opts & outFile of
           Nothing -> interactiveLines rotate
           Just o -> do
-            line <- getLine
-            writeFile o (rotate line)
-            interactiveLinesAppend rotate o
+            end <- isEOF
+            if end
+              then return ()
+              else do
+                line <- getLine
+                writeFile o (rotate line)
+                interactiveLinesAppend rotate o
       )
     Just i ->
       ( case opts & outFile of
@@ -100,15 +87,23 @@ main = do
 
 interactiveLines :: (String -> String) -> IO ()
 interactiveLines cipher = do
-  line <- getLine
-  putStrLn (cipher line)
-  interactiveLines cipher
+  end <- isEOF
+  if end
+    then return ()
+    else do
+      line <- getLine
+      putStrLn $ cipher line
+      interactiveLines cipher
 
 interactiveLinesAppend :: (String -> String) -> String -> IO ()
 interactiveLinesAppend cipher outputFile = do
-  line <- getLine
-  appendFile outputFile $ "\n" <> cipher line
-  interactiveLinesAppend cipher outputFile
+  end <- isEOF
+  if end
+    then appendFile outputFile ""
+    else do
+      line <- getLine
+      appendFile outputFile $ "\n" <> cipher line
+      interactiveLinesAppend cipher outputFile
 
 printHelpText :: String -> IO ()
 printHelpText msg = do

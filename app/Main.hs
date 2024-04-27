@@ -65,50 +65,45 @@ main = do
   case opts & inFile of
     Nothing ->
       ( case opts & outFile of
-          Nothing -> interactiveLines 1 rotate
+          Nothing -> interactiveLines rotate
           Just o -> do
             end <- isEOF
             if end
               then return ()
               else do
                 line <- getLine
-                let (secret, endPos) = (rotate 1 line)
-                writeFile o secret
-                interactiveLinesAppend endPos rotate o
+                writeFile o (rotate line)
+                interactiveLinesAppend rotate o
       )
     Just i ->
       ( case opts & outFile of
           Nothing -> do
             fileContent <- readFile i
-            let (secret, endPos) = (rotate 1 fileContent)
-            putStrLn secret
+            putStrLn (rotate fileContent)
           Just o -> do
             fileContent <- readFile i
-            let (secret, endPos) = (rotate 1 fileContent)
-            writeFile o secret
+            writeFile o (rotate fileContent)
       )
 
-interactiveLines :: Int -> (Int -> String -> (String, Int)) -> IO ()
-interactiveLines start cipher = do
+interactiveLines :: (String -> String) -> IO ()
+interactiveLines cipher = do
   end <- isEOF
   if end
     then return ()
     else do
       line <- getLine
-      let (secret, endPos) = (cipher start line)
-      putStrLn $ secret
-      interactiveLines endPos cipher
+      putStrLn $ cipher line
+      interactiveLines cipher
 
-interactiveLinesAppend :: Int -> (Int -> String -> (String, Int)) -> String -> IO ()
-interactiveLinesAppend start cipher outputFile = do
+interactiveLinesAppend :: (String -> String) -> String -> IO ()
+interactiveLinesAppend cipher outputFile = do
   end <- isEOF
   if end
     then appendFile outputFile ""
     else do
       line <- getLine
-      let (secret, endPos) = (cipher start line)
-      appendFile outputFile $ "\n" <> secret
-      interactiveLinesAppend (endPos + 1) cipher outputFile
+      appendFile outputFile $ "\n" <> cipher line
+      interactiveLinesAppend cipher outputFile
 
 printHelpText :: String -> IO ()
 printHelpText msg = do

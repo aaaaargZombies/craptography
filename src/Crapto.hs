@@ -63,32 +63,19 @@ caesar n = map (rotChar n)
 rot13 :: String -> String
 rot13 = caesar 13
 
--- this needs to take a start point and return an end point
+rotFib :: String -> String
+rotFib msg =
+  msg
+    & S.fromList
+    & S.mapWithIndex (\n c -> rotFibChar (n + 1) c)
+    & foldr (:) ""
 
-rotFib :: Int -> String -> (String, Int)
-rotFib start msg =
-  ( msg
-      & S.fromList
-      & S.mapWithIndex (\n c -> rotFibChar (n + start) c)
-      & foldr (:) ""
-  , start + length msg
-  )
-
-unRotFib :: Int -> String -> (String, Int)
-unRotFib start msg =
-  ( msg
-      & S.fromList
-      & S.mapWithIndex (\n c -> rotFibChar (n - start) c)
-      & foldr (:) ""
-  , start - length msg
-  )
-
--- unRotFib :: String -> String
--- unRotFib msg =
---   msg
---     & S.fromList
---     & S.mapWithIndex (\n c -> rotFibChar ((-n) - 1) c)
---     & foldr (:) ""
+unRotFib :: String -> String
+unRotFib msg =
+  msg
+    & S.fromList
+    & S.mapWithIndex (\n c -> rotFibChar ((-n) - 1) c)
+    & foldr (:) ""
 
 fib :: Int -> Int
 fib = f

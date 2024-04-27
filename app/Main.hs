@@ -56,6 +56,9 @@ parseArguments (x : xs) opts = parseArguments xs $ updateOpts x xs opts
 -- I'm continuing to increment fib sequence on non Alphabet words
 -- so will need to watch for that in the difference as we'll loose
 -- the '\n' on stdin
+--
+-- might be a good time to add some tests to start comparing outputs
+-- of the different modes to make sure they remain consistent
 
 main :: IO ()
 main = do

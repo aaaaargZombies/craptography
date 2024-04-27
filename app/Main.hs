@@ -107,7 +107,7 @@ interactiveLines cipher = do
 interactiveLinesAppend :: (String -> String) -> String -> IO ()
 interactiveLinesAppend cipher outputFile = do
   line <- getLine
-  appendFile outputFile $ "\n" <> (cipher line)
+  appendFile outputFile $ "\n" <> cipher line
   interactiveLinesAppend cipher outputFile
 
 printHelpText :: String -> IO ()

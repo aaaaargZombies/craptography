@@ -65,52 +65,22 @@ main = do
   args <- getArgs
   let opts = parseArguments args defaultOpts
       rotate = if opts & decrapt then unRotFib else rotFib
-  case opts & inFile of
-    Nothing ->
-      ( case opts & outFile of
-          Nothing -> interactiveLines rotate
-          Just o -> do
-            end <- isEOF
-            if end
-              then return ()
-              else do
-                line <- getLine
-                writeFile o (rotate line)
-                interactiveLinesAppend rotate o
-      )
-    Just i ->
-      ( case opts & outFile of
-          Nothing -> do
-            fileContent <- readFile i
-            putStrLn (rotate fileContent)
-          Just o -> do
-            fileContent <- readFile i
-            writeFile o (rotate fileContent)
-      )
-
-interactiveLines :: (String -> String) -> IO ()
-interactiveLines cipher = do
-  end <- isEOF
-  if end
-    then return ()
-    else do
-      line <- getLine
-      putStrLn $ cipher line
-      interactiveLines cipher
-
-interactiveLinesAppend :: (String -> String) -> String -> IO ()
-interactiveLinesAppend cipher outputFile = do
-  end <- isEOF
-  if end
-    then appendFile outputFile ""
-    else do
-      line <- getLine
-      appendFile outputFile $ "\n" <> cipher line
-      interactiveLinesAppend cipher outputFile
+  if opts & help
+    then printHelpText ""
+    else case opts & inFile of
+      Nothing -> printHelpText "  \62497  Missing input file\n"
+      Just i ->
+        ( case opts & outFile of
+            Nothing -> printHelpText "   \62497 Missing output file\n"
+            Just o -> do
+              fileContent <- readFile i
+              writeFile o (rotate fileContent)
+        )
 
 printHelpText :: String -> IO ()
 printHelpText msg = do
   putStrLn "\n"
+  putStrLn msg
   progName <- getProgName
   putStrLn (" Usage: " ++ progName ++ " <options>")
   putStrLn "\n"
@@ -123,6 +93,6 @@ printHelpText msg = do
   putStrLn "   --help    | -h        - Show this help text"
   putStrLn "\n"
   putStrLn " Examples:"
-  putStrLn ("   $ cat diaryEntry.txt | " ++ progName ++ " -o secretMessage.txt")
-  putStrLn ("   $ " ++ progName ++ " -d -i secretMessage.txt")
+  putStrLn ("   $ " ++ progName ++ " -i diaryEntry.txt -o secretMessage.txt")
+  putStrLn ("   $ " ++ progName ++ " -d -i secretMessage.txt -o message.txt")
   putStrLn "\n"

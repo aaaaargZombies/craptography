@@ -64,11 +64,18 @@ rot13 :: String -> String
 rot13 = caesar 13
 
 rotFib :: String -> String
-rotFib msg =
-  msg
-    & S.fromList
-    & S.mapWithIndex (\n c -> rotFibChar (n + 1) c)
-    & foldr (:) ""
+rotFib msg = go (left, right, [rotChar 1 h]) t
+ where
+  left = fib 0
+  right = fib 1
+  (h : t) = msg
+
+  go :: (Int, Int, String) -> String -> String
+  go (l, r, acc) [] = acc
+  go (l, r, acc) (x : xs) =
+    let n = (l + r)
+        a = rotChar n x
+     in go (r, n, acc <> [a]) xs
 
 unRotFib :: String -> String
 unRotFib msg =

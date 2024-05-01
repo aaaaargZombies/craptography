@@ -54,51 +54,30 @@ rotChar n ch
   | isDigit ch = digitRot n ch
   | otherwise = ch
 
-rotFibChar :: Int -> Char -> Char
-rotFibChar n = rotChar (fib n)
-
-caesar :: Int -> Alphabet -> Alphabet
-caesar n = map (rotChar n)
-
-rot13 :: String -> String
-rot13 = caesar 13
-
 rotFib :: String -> String
 rotFib msg = go (left, right, [rotChar 1 h]) t
  where
-  left = fib 0
-  right = fib 1
+  left = 0
+  right = 1
   (h : t) = msg
 
   go :: (Int, Int, String) -> String -> String
-  go (l, r, acc) [] = acc
+  go (_, _, acc) [] = acc
   go (l, r, acc) (x : xs) =
     let n = (l + r)
         a = rotChar n x
      in go (r, n, acc <> [a]) xs
 
 unRotFib :: String -> String
-unRotFib msg =
-  msg
-    & S.fromList
-    & S.mapWithIndex (\n c -> rotFibChar ((-n) - 1) c)
-    & foldr (:) ""
-
-fib :: Int -> Int
-fib = f
+unRotFib msg = go (left, right, [rotChar (-1) h]) t
  where
-  f n =
-    case compare n 0 of
-      LT -> fn n
-      EQ -> 0
-      GT -> fp n
+  left = 0
+  right = -1
+  (h : t) = msg
 
-  fp n
-    | n == 1 = 1
-    | n == 2 = 1
-    | otherwise = fp (n - 1) + fp (n - 2)
-
-  fn n
-    | n == (-1) = -1
-    | n == (-2) = -1
-    | otherwise = fn (n + 1) + fn (n + 2)
+  go :: (Int, Int, String) -> String -> String
+  go (_, _, acc) [] = acc
+  go (l, r, acc) (x : xs) =
+    let n = (l + r)
+        a = rotChar n x
+     in go (r, n, acc <> [a]) xs

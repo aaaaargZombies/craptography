@@ -55,6 +55,7 @@ rotChar n ch
   | otherwise = ch
 
 rotFib :: String -> String
+rotFib [] = ""
 rotFib msg = go (left, right, [rotChar 1 h]) t
  where
   left = 0
@@ -69,6 +70,7 @@ rotFib msg = go (left, right, [rotChar 1 h]) t
      in go (r, n, acc <> [a]) xs
 
 unRotFib :: String -> String
+unRotFib [] = ""
 unRotFib msg = go (left, right, [rotChar (-1) h]) t
  where
   left = 0

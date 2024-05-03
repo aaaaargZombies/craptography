@@ -1,9 +1,7 @@
 module Main (main) where
 
-import Control.Exception
-import Crapto
+import qualified Crapto as C
 import Data.Function ((&))
-import GHC.IO.Handle (isEOF)
 import System.Environment
 
 data Opts = Opts
@@ -17,7 +15,6 @@ data Opts = Opts
 defaultOpts :: Opts
 defaultOpts = Opts{help = False, decrapt = False, inFile = Nothing, outFile = Nothing}
 
--- I probably want to fold the list of args and update the defaultOpts
 parseArguments :: [String] -> Opts -> Opts
 parseArguments [] opts = opts
 parseArguments (x : xs) opts = parseArguments xs $ updateOpts x xs opts
@@ -59,12 +56,18 @@ parseArguments (x : xs) opts = parseArguments xs $ updateOpts x xs opts
 --
 -- might be a good time to add some tests to start comparing outputs
 -- of the different modes to make sure they remain consistent
+--
+-- I also need to figure out if I'm going to be able to split and
+-- restart the decrapt function if I work line by line or if I need
+-- to wait for them all to come in then <> and alter that string
+-- Don't really like the idea of that, I'd like to be able to do it
+-- in stream
 
 main :: IO ()
 main = do
   args <- getArgs
   let opts = parseArguments args defaultOpts
-      rotate = if opts & decrapt then unRotFib else rotFib
+      rotate = if opts & decrapt then C.decrapt else C.encrapt
   if opts & help
     then printHelpText ""
     else case opts & inFile of

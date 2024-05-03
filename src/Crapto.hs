@@ -1,12 +1,7 @@
-module Crapto where
+module Crapto (encrapt, decrapt) where
 
-import qualified Data.Foldable as S
-import Data.Function ((&))
-import qualified Data.List as L
-import qualified Data.Sequence as S
-
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+import qualified Data.Maybe as Maybe
+import qualified Data.Text as Text
 
 type Alphabet = [Char]
 
@@ -54,32 +49,25 @@ rotChar n ch
   | isDigit ch = digitRot n ch
   | otherwise = ch
 
-rotFib :: String -> String
-rotFib [] = ""
-rotFib msg = go (left, right, [rotChar 1 h]) t
+rotFib :: Int -> Int -> String -> String
+rotFib _ _ [] = ""
+rotFib a b msg = Text.unpack secret
  where
-  left = 0
-  right = 1
-  (h : t) = msg
+  (h, t) = Maybe.fromMaybe ('a', Text.empty) $ Text.uncons $ Text.pack msg
+  left = a
+  right = b
+  (_, _, secret) =
+    Text.foldl
+      ( \(l, r, acc) char ->
+          let n = l + r
+              c = rotChar n char
+           in (r, n, Text.snoc acc c)
+      )
+      (left, right, Text.singleton $ rotChar b h)
+      t
 
-  go :: (Int, Int, String) -> String -> String
-  go (_, _, acc) [] = acc
-  go (l, r, acc) (x : xs) =
-    let n = (l + r)
-        a = rotChar n x
-     in go (r, n, acc <> [a]) xs
+encrapt :: String -> String
+encrapt = rotFib 0 1
 
-unRotFib :: String -> String
-unRotFib [] = ""
-unRotFib msg = go (left, right, [rotChar (-1) h]) t
- where
-  left = 0
-  right = -1
-  (h : t) = msg
-
-  go :: (Int, Int, String) -> String -> String
-  go (_, _, acc) [] = acc
-  go (l, r, acc) (x : xs) =
-    let n = (l + r)
-        a = rotChar n x
-     in go (r, n, acc <> [a]) xs
+decrapt :: String -> String
+decrapt = rotFib 0 (-1)

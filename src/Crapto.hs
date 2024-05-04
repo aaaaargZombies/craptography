@@ -1,37 +1,22 @@
 module Crapto (encrapt, decrapt) where
 
+import qualified Data.Char as Char
 import qualified Data.Maybe as Maybe
 import qualified Data.Text as Text
 
-type Alphabet = [Char]
-
-isUpper :: Char -> Bool
-isUpper char = char `elem` upperAlphabet
-
-isLower :: Char -> Bool
-isLower char = char `elem` lowerAlphabet
-
-isDigit :: Char -> Bool
-isDigit = (`elem` digits)
-
-isMisc :: Char -> Bool
-isMisc char = char `notElem` lowerAlphabet ++ upperAlphabet ++ digits
+type Alphabet = (Char, Int)
 
 lowerAlphabet :: Alphabet
-lowerAlphabet = ['a' .. 'z']
+lowerAlphabet = ('a', 26)
 
 upperAlphabet :: Alphabet
-upperAlphabet = ['A' .. 'Z']
+upperAlphabet = ('A', 26)
 
 digits :: Alphabet
-digits = ['0' .. '9']
-
-indexOf :: (Eq a) => a -> [a] -> Int
-indexOf _ [] = undefined
-indexOf a (x : xs) = if x == a then 0 else 1 + indexOf a xs
+digits = ('0', 10)
 
 alphabetRot :: Alphabet -> Int -> Char -> Char
-alphabetRot alphabet n ch = alphabet !! ((indexOf ch alphabet + n) `mod` length alphabet)
+alphabetRot (startChar, size) n ch = Char.chr $ Char.ord startChar + ((Char.ord ch - Char.ord startChar + n) `mod` size)
 
 digitRot :: Int -> Char -> Char
 digitRot = alphabetRot digits
@@ -44,9 +29,9 @@ lowerRot = alphabetRot lowerAlphabet
 
 rotChar :: Int -> Char -> Char
 rotChar n ch
-  | isLower ch = lowerRot n ch
-  | isUpper ch = upperRot n ch
-  | isDigit ch = digitRot n ch
+  | Char.isLower ch = lowerRot n ch
+  | Char.isUpper ch = upperRot n ch
+  | Char.isDigit ch = digitRot n ch
   | otherwise = ch
 
 rotFib :: Int -> Int -> String -> String

@@ -4,6 +4,9 @@ import qualified Data.Char as Char
 import qualified Data.Maybe as Maybe
 import qualified Data.Text as Text
 
+{-
+ Describes the starting Char and length of the set
+-}
 type Alphabet = (Char, Int)
 
 lowerAlphabet :: Alphabet

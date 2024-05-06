@@ -1,4 +1,4 @@
-module Crapto (encrapt, decrapt) where
+module Crapto (contRotFib, encrapt, decrapt) where
 
 import qualified Data.Char as Char
 import qualified Data.Maybe as Maybe
@@ -37,14 +37,14 @@ rotChar n ch
   | Char.isDigit ch = digitRot n ch
   | otherwise = ch
 
-rotFib :: Int -> Int -> String -> String
-rotFib _ _ [] = ""
-rotFib a b msg = Text.unpack secret
+contRotFib :: Int -> Int -> String -> (Int, Int, String)
+contRotFib a b [] = (a, b, "")
+contRotFib a b msg = (r, l + r, Text.unpack secret)
  where
   (h, t) = Maybe.fromMaybe ('a', Text.empty) $ Text.uncons $ Text.pack msg
   left = a
   right = b
-  (_, _, secret) =
+  (l, r, secret) =
     Text.foldl
       ( \(l, r, acc) char ->
           let n = l + r
@@ -54,8 +54,8 @@ rotFib a b msg = Text.unpack secret
       (left, right, Text.singleton $ rotChar b h)
       t
 
-encrapt :: String -> String
-encrapt = rotFib 0 1
+encrapt :: String -> (Int, Int, String)
+encrapt = contRotFib 0 1
 
-decrapt :: String -> String
-decrapt = rotFib 0 (-1)
+decrapt :: String -> (Int, Int, String)
+decrapt = contRotFib 0 (-1)

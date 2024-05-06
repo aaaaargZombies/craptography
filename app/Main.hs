@@ -72,12 +72,13 @@ main = do
     then printHelpText ""
     else case opts & inFile of
       Nothing -> printHelpText "  \62497  Missing input file\n"
-      Just i ->
+      Just inputFile ->
         ( case opts & outFile of
             Nothing -> printHelpText "   \62497 Missing output file\n"
-            Just o -> do
-              fileContent <- readFile i
-              writeFile o (rotate fileContent)
+            Just outputFile -> do
+              fileContent <- readFile inputFile
+              let (_, _, msg) = rotate fileContent
+              writeFile outputFile msg
         )
 
 printHelpText :: String -> IO ()

@@ -1,8 +1,8 @@
 module Crapto (contRotFib, encrapt, decrapt) where
 
 import qualified Data.Char as Char
+import qualified Data.List as List
 import qualified Data.Maybe as Maybe
-import qualified Data.Text as Text
 
 {-
  Describes the starting Char and length of the set
@@ -39,19 +39,19 @@ rotChar n ch
 
 contRotFib :: Int -> Int -> String -> (Int, Int, String)
 contRotFib a b [] = (a, b, "")
-contRotFib a b msg = (r, l + r, Text.unpack secret)
+contRotFib a b msg = (r, l + r, List.reverse secret)
  where
-  (h, t) = Maybe.fromMaybe ('a', Text.empty) $ Text.uncons $ Text.pack msg
+  (h, t) = Maybe.fromMaybe ('a', "") $ List.uncons msg
   left = a
   right = b
   (l, r, secret) =
-    Text.foldl
+    List.foldl
       ( \(l, r, acc) char ->
           let n = l + r
               c = rotChar n char
-           in (r, n, Text.snoc acc c)
+           in (r, n, c : acc)
       )
-      (left, right, Text.singleton $ rotChar b h)
+      (left, right, [rotChar b h])
       t
 
 encrapt :: String -> (Int, Int, String)

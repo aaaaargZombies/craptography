@@ -1,77 +1,84 @@
-	Wed May  8 11:57 2024 Time and Allocation Profiling Report  (Final)
+	Wed May  8 12:48 2024 Time and Allocation Profiling Report  (Final)
 
 	   craptography-exe +RTS -N -p -RTS -i test.md -o testOut.txt
 
-	total time  =        5.55 secs   (18909 ticks @ 1000 us, 12 processors)
-	total alloc = 70,756,158,024 bytes  (excludes profiling overheads)
+	total time  =        0.01 secs   (18 ticks @ 1000 us, 12 processors)
+	total alloc =  15,168,632 bytes  (excludes profiling overheads)
 
-COST CENTRE        MODULE SRC                            %time %alloc
+COST CENTRE          MODULE    SRC                            %time %alloc
 
-contRotFib.(...).\ Crapto src/Crapto.hs:(50,11)-(52,37)   99.8  100.0
+MAIN                 MAIN      <built-in>                      44.4    1.2
+main                 Main      app/Main.hs:(67,1)-(82,9)       27.8   17.9
+rotChar              Crapto    src/Crapto.hs:(35,1)-(39,18)    11.1    0.0
+lowerRot             Crapto    src/Crapto.hs:32:1-36            5.6    5.7
+contRotFib.(...).\   Crapto    src/Crapto.hs:(51,11)-(53,29)    5.6   51.8
+alphabetRot          Crapto    src/Crapto.hs:23:1-120           5.6    5.8
+contRotFib.(...).\.n Crapto    src/Crapto.hs:51:15-23           0.0    6.9
+contRotFib           Crapto    src/Crapto.hs:(42,1)-(56,7)      0.0   10.4
 
 
                                                                                                        individual      inherited
 COST CENTRE                   MODULE                  SRC                           no.     entries  %time %alloc   %time %alloc
 
-MAIN                          MAIN                    <built-in>                    207           0    0.0    0.0   100.0  100.0
- CAF                          GHC.Conc.Signal         <entire-module>               388           0    0.0    0.0     0.0    0.0
- CAF                          GHC.Event.Thread        <entire-module>               373           0    0.0    0.0     0.0    0.0
- CAF                          GHC.IO.Encoding         <entire-module>               354           0    0.0    0.0     0.0    0.0
- CAF                          GHC.IO.Encoding.Iconv   <entire-module>               352           0    0.0    0.0     0.0    0.0
- CAF                          GHC.IO.Exception        <entire-module>               346           0    0.0    0.0     0.0    0.0
- CAF                          GHC.IO.FD               <entire-module>               345           0    0.0    0.0     0.0    0.0
- CAF                          GHC.IO.Handle.FD        <entire-module>               343           0    0.0    0.0     0.0    0.0
- CAF                          GHC.IO.Handle.Internals <entire-module>               342           0    0.0    0.0     0.0    0.0
- CAF:defaultOpts              Main                    app/Main.hs:16:1-11           261           0    0.0    0.0     0.0    0.0
-  defaultOpts                 Main                    app/Main.hs:16:1-86           420           1    0.0    0.0     0.0    0.0
- CAF:encrapt                  Crapto                  src/Crapto.hs:58:1-7          221           0    0.0    0.0     0.0    0.0
-  encrapt                     Crapto                  src/Crapto.hs:58:1-24         426           1    0.0    0.0     0.0    0.0
- CAF:lowerAlphabet_rtf        Crapto                  src/Crapto.hs:13:1-13         214           0    0.0    0.0     0.0    0.0
-  lowerAlphabet               Crapto                  src/Crapto.hs:13:1-25         445           1    0.0    0.0     0.0    0.0
- CAF:lowerRot_rtl             Crapto                  src/Crapto.hs:31:1-8          219           0    0.0    0.0     0.0    0.0
-  lowerRot                    Crapto                  src/Crapto.hs:31:1-36         443           1    0.0    0.0     0.0    0.0
- CAF:lvl11_r2Py               Main                    <no location info>            267           0    0.0    0.0     0.0    0.0
- CAF:lvl13_r2PA               Main                    <no location info>            268           0    0.0    0.0     0.0    0.0
- CAF:lvl15_r2PC               Main                    <no location info>            269           0    0.0    0.0     0.0    0.0
- CAF:lvl1_r2Po                Main                    <no location info>            262           0    0.0    0.0     0.0    0.0
- CAF:lvl3_r2Pq                Main                    <no location info>            263           0    0.0    0.0     0.0    0.0
- CAF:lvl5_r2Ps                Main                    <no location info>            264           0    0.0    0.0     0.0    0.0
- CAF:lvl7_r2Pu                Main                    <no location info>            265           0    0.0    0.0     0.0    0.0
- CAF:lvl9_r2Pw                Main                    <no location info>            266           0    0.0    0.0     0.0    0.0
- CAF:main1                    Main                    <no location info>            284           0    0.0    0.0     0.0    0.0
-  main                        Main                    app/Main.hs:(67,1)-(82,9)     414           1    0.0    0.0     0.0    0.0
- CAF:upperAlphabet_rtg        Crapto                  src/Crapto.hs:16:1-13         215           0    0.0    0.0     0.0    0.0
-  upperAlphabet               Crapto                  src/Crapto.hs:16:1-25         439           1    0.0    0.0     0.0    0.0
- CAF:upperRot_rtk             Crapto                  src/Crapto.hs:28:1-8          218           0    0.0    0.0     0.0    0.0
-  upperRot                    Crapto                  src/Crapto.hs:28:1-36         437           1    0.0    0.0     0.0    0.0
- main                         Main                    app/Main.hs:(67,1)-(82,9)     415           0    0.0    0.0   100.0  100.0
-  help                        Main                    app/Main.hs:11:5-8            416           1    0.0    0.0     0.0    0.0
-  inFile                      Main                    app/Main.hs:8:5-10            421           1    0.0    0.0     0.0    0.0
-  main.(...)                  Main                    app/Main.hs:80:19-50          423           1    0.0    0.0    99.9  100.0
-   main.rotate                Main                    app/Main.hs:70:7-62           424           1    0.0    0.0    99.9  100.0
-    decrapt                   Main                    app/Main.hs:10:5-11           425           1    0.0    0.0     0.0    0.0
-    encrapt                   Crapto                  src/Crapto.hs:58:1-24         427           0    0.0    0.0    99.9  100.0
-     contRotFib               Crapto                  src/Crapto.hs:(41,1)-(55,7)   428           1    0.0    0.0    99.9  100.0
-      contRotFib.(...)        Crapto                  src/Crapto.hs:(47,3)-(55,7)   433           1    0.0    0.0    99.9  100.0
-       contRotFib.(...).\     Crapto                  src/Crapto.hs:(50,11)-(52,37) 434       65472   99.8  100.0    99.9  100.0
-        contRotFib.(...).\.c  Crapto                  src/Crapto.hs:51:15-32        441       65472    0.0    0.0     0.1    0.0
-         rotChar              Crapto                  src/Crapto.hs:(34,1)-(38,18)  442       65472    0.1    0.0     0.1    0.0
-          lowerRot            Crapto                  src/Crapto.hs:31:1-36         444           0    0.0    0.0     0.0    0.0
-           alphabetRot        Crapto                  src/Crapto.hs:22:1-120        449       53712    0.0    0.0     0.0    0.0
-          upperRot            Crapto                  src/Crapto.hs:28:1-36         450           0    0.0    0.0     0.0    0.0
-           alphabetRot        Crapto                  src/Crapto.hs:22:1-120        451        1103    0.0    0.0     0.0    0.0
-        contRotFib.(...).\.n  Crapto                  src/Crapto.hs:50:15-23        446       65471    0.0    0.0     0.0    0.0
-       rotChar                Crapto                  src/Crapto.hs:(34,1)-(38,18)  435           1    0.0    0.0     0.0    0.0
-        upperRot              Crapto                  src/Crapto.hs:28:1-36         438           0    0.0    0.0     0.0    0.0
-         alphabetRot          Crapto                  src/Crapto.hs:22:1-120        440           1    0.0    0.0     0.0    0.0
-      contRotFib.(...)        Crapto                  src/Crapto.hs:44:3-74         431           1    0.0    0.0     0.0    0.0
-      contRotFib.h            Crapto                  src/Crapto.hs:44:3-74         436           1    0.0    0.0     0.0    0.0
-      contRotFib.left         Crapto                  src/Crapto.hs:45:3-10         447           1    0.0    0.0     0.0    0.0
-      contRotFib.right        Crapto                  src/Crapto.hs:46:3-11         448           1    0.0    0.0     0.0    0.0
-      contRotFib.secret       Crapto                  src/Crapto.hs:(47,3)-(55,7)   430           1    0.0    0.0     0.0    0.0
-      contRotFib.t            Crapto                  src/Crapto.hs:44:3-74         432           1    0.0    0.0     0.0    0.0
-  main.msg                    Main                    app/Main.hs:80:19-50          429           1    0.0    0.0     0.0    0.0
-  main.opts                   Main                    app/Main.hs:69:7-44           417           1    0.0    0.0     0.0    0.0
-   parseArguments             Main                    app/Main.hs:(19,1)-(45,15)    418           5    0.0    0.0     0.0    0.0
-    parseArguments.updateOpts Main                    app/Main.hs:(23,3)-(45,15)    419           4    0.0    0.0     0.0    0.0
-  outFile                     Main                    app/Main.hs:9:5-11            422           1    0.0    0.0     0.0    0.0
+MAIN                          MAIN                    <built-in>                    198           0   44.4    1.2   100.0  100.0
+ CAF                          GHC.Conc.Signal         <entire-module>               371           0    0.0    0.0     0.0    0.0
+ CAF                          GHC.Event.Thread        <entire-module>               356           0    0.0    0.0     0.0    0.0
+ CAF                          GHC.IO.Encoding         <entire-module>               337           0    0.0    0.0     0.0    0.0
+ CAF                          GHC.IO.Encoding.Iconv   <entire-module>               335           0    0.0    0.0     0.0    0.0
+ CAF                          GHC.IO.Exception        <entire-module>               329           0    0.0    0.0     0.0    0.0
+ CAF                          GHC.IO.FD               <entire-module>               328           0    0.0    0.0     0.0    0.0
+ CAF                          GHC.IO.Handle.FD        <entire-module>               326           0    0.0    0.2     0.0    0.2
+ CAF                          GHC.IO.Handle.Internals <entire-module>               325           0    0.0    0.0     0.0    0.0
+ CAF:defaultOpts              Main                    app/Main.hs:16:1-11           251           0    0.0    0.0     0.0    0.0
+  defaultOpts                 Main                    app/Main.hs:16:1-86           402           1    0.0    0.0     0.0    0.0
+ CAF:encrapt                  Crapto                  src/Crapto.hs:59:1-7          211           0    0.0    0.0     0.0    0.0
+  encrapt                     Crapto                  src/Crapto.hs:59:1-24         408           1    0.0    0.0     0.0    0.0
+ CAF:lowerAlphabet            Crapto                  src/Crapto.hs:14:1-13         205           0    0.0    0.0     0.0    0.0
+  lowerAlphabet               Crapto                  src/Crapto.hs:14:1-25         427           1    0.0    0.0     0.0    0.0
+ CAF:lowerRot                 Crapto                  src/Crapto.hs:32:1-8          210           0    0.0    0.0     0.0    0.0
+  lowerRot                    Crapto                  src/Crapto.hs:32:1-36         425           1    0.0    0.0     0.0    0.0
+ CAF:lvl11_r2PK               Main                    <no location info>            257           0    0.0    0.0     0.0    0.0
+ CAF:lvl13_r2PM               Main                    <no location info>            258           0    0.0    0.0     0.0    0.0
+ CAF:lvl15_r2PO               Main                    <no location info>            259           0    0.0    0.0     0.0    0.0
+ CAF:lvl1_r2PA                Main                    <no location info>            252           0    0.0    0.0     0.0    0.0
+ CAF:lvl3_r2PC                Main                    <no location info>            253           0    0.0    0.0     0.0    0.0
+ CAF:lvl5_r2PE                Main                    <no location info>            254           0    0.0    0.0     0.0    0.0
+ CAF:lvl7_r2PG                Main                    <no location info>            255           0    0.0    0.0     0.0    0.0
+ CAF:lvl9_r2PI                Main                    <no location info>            256           0    0.0    0.0     0.0    0.0
+ CAF:main1                    Main                    <no location info>            274           0    0.0    0.0     0.0    0.0
+  main                        Main                    app/Main.hs:(67,1)-(82,9)     396           1    0.0    0.0     0.0    0.0
+ CAF:upperAlphabet            Crapto                  src/Crapto.hs:17:1-13         206           0    0.0    0.0     0.0    0.0
+  upperAlphabet               Crapto                  src/Crapto.hs:17:1-25         421           1    0.0    0.0     0.0    0.0
+ CAF:upperRot                 Crapto                  src/Crapto.hs:29:1-8          209           0    0.0    0.0     0.0    0.0
+  upperRot                    Crapto                  src/Crapto.hs:29:1-36         419           1    0.0    0.0     0.0    0.0
+ main                         Main                    app/Main.hs:(67,1)-(82,9)     397           0   27.8   17.9    55.6   98.6
+  help                        Main                    app/Main.hs:11:5-8            398           1    0.0    0.0     0.0    0.0
+  inFile                      Main                    app/Main.hs:8:5-10            403           1    0.0    0.0     0.0    0.0
+  main.(...)                  Main                    app/Main.hs:80:19-50          405           1    0.0    0.0    27.8   80.6
+   main.rotate                Main                    app/Main.hs:70:7-62           406           1    0.0    0.0    27.8   80.6
+    decrapt                   Main                    app/Main.hs:10:5-11           407           1    0.0    0.0     0.0    0.0
+    encrapt                   Crapto                  src/Crapto.hs:59:1-24         409           0    0.0    0.0    27.8   80.6
+     contRotFib               Crapto                  src/Crapto.hs:(42,1)-(56,7)   410           1    0.0   10.4    27.8   80.6
+      contRotFib.(...)        Crapto                  src/Crapto.hs:(48,3)-(56,7)   415           1    0.0    0.0    27.8   70.3
+       contRotFib.(...).\     Crapto                  src/Crapto.hs:(51,11)-(53,29) 416       65472    5.6   51.8    27.8   70.3
+        contRotFib.(...).\.c  Crapto                  src/Crapto.hs:52:15-32        423       65472    0.0    0.0    22.2   11.6
+         rotChar              Crapto                  src/Crapto.hs:(35,1)-(39,18)  424       65472   11.1    0.0    22.2   11.6
+          lowerRot            Crapto                  src/Crapto.hs:32:1-36         426           0    5.6    5.7    11.1   11.3
+           alphabetRot        Crapto                  src/Crapto.hs:23:1-120        431       53712    5.6    5.7     5.6    5.7
+          upperRot            Crapto                  src/Crapto.hs:29:1-36         432           0    0.0    0.1     0.0    0.2
+           alphabetRot        Crapto                  src/Crapto.hs:23:1-120        433        1103    0.0    0.1     0.0    0.1
+        contRotFib.(...).\.n  Crapto                  src/Crapto.hs:51:15-23        428       65471    0.0    6.9     0.0    6.9
+       rotChar                Crapto                  src/Crapto.hs:(35,1)-(39,18)  417           1    0.0    0.0     0.0    0.0
+        upperRot              Crapto                  src/Crapto.hs:29:1-36         420           0    0.0    0.0     0.0    0.0
+         alphabetRot          Crapto                  src/Crapto.hs:23:1-120        422           1    0.0    0.0     0.0    0.0
+      contRotFib.(...)        Crapto                  src/Crapto.hs:45:3-54         414           1    0.0    0.0     0.0    0.0
+      contRotFib.h            Crapto                  src/Crapto.hs:45:3-54         418           1    0.0    0.0     0.0    0.0
+      contRotFib.left         Crapto                  src/Crapto.hs:46:3-10         429           1    0.0    0.0     0.0    0.0
+      contRotFib.right        Crapto                  src/Crapto.hs:47:3-11         430           1    0.0    0.0     0.0    0.0
+      contRotFib.secret       Crapto                  src/Crapto.hs:(48,3)-(56,7)   412           1    0.0    0.0     0.0    0.0
+      contRotFib.t            Crapto                  src/Crapto.hs:45:3-54         413           1    0.0    0.0     0.0    0.0
+  main.msg                    Main                    app/Main.hs:80:19-50          411           1    0.0    0.0     0.0    0.0
+  main.opts                   Main                    app/Main.hs:69:7-44           399           1    0.0    0.0     0.0    0.0
+   parseArguments             Main                    app/Main.hs:(19,1)-(45,15)    400           5    0.0    0.0     0.0    0.0
+    parseArguments.updateOpts Main                    app/Main.hs:(23,3)-(45,15)    401           4    0.0    0.0     0.0    0.0
+  outFile                     Main                    app/Main.hs:9:5-11            404           1    0.0    0.0     0.0    0.0

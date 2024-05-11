@@ -60,3 +60,4 @@ tests:
     dependencies:
       - craptography
       - hspec
+      - hedgehog

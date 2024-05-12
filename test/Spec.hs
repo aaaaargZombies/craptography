@@ -10,6 +10,14 @@ import Hedgehog
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 
+encraptLines :: [String] -> (C.FibState, String)
+encraptLines [] = C.encrapt ""
+encraptLines (x : xs) =
+  List.foldl
+    (\(fs, acc) line -> let (fst, secret) = C.contRotFib fs ("\n" <> line) in (fst, acc <> secret))
+    (C.encrapt x)
+    xs
+
 prop_decrapt :: Property
 prop_decrapt =
   property $ do
@@ -28,7 +36,7 @@ prop_continue =
       xs = start <> middle <> end
       (_, single) = C.encrapt xs
       lxs = lines xs
-      (_, plural) = C.encraptLines lxs
+      (_, plural) = encraptLines lxs
     single === plural
 
 tests :: IO Bool
@@ -53,5 +61,5 @@ main = do
         let tstStr = "apl\nThis is a test\nshort\nA much longer line that SHOULD be at the end"
             tstLines = lines tstStr
             (_, secretStr) = C.encrapt tstStr
-            (_, secretLines) = C.encraptLines tstLines
+            (_, secretLines) = encraptLines tstLines
         secretLines `shouldBe` secretStr

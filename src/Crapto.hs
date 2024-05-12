@@ -52,8 +52,8 @@ contRotFib fst msg = (fs, List.reverse secret)
  where
   (fs, secret) =
     List.foldl
-      ( \((l, r, fs), acc) char ->
-          case fs of
+      ( \((l, r, fp), acc) char ->
+          case fp of
             First ->
               -- fib 1 = 1
               let c = rotChar r char
@@ -75,4 +75,4 @@ encrapt :: String -> (FibState, String)
 encrapt = contRotFib (1, 1, First) -- I guess this is where I'd need a dependant type to ensure it's valid
 
 decrapt :: String -> (FibState, String)
-decrapt = contRotFib (1, -1, First)
+decrapt = contRotFib (-1, -1, First)

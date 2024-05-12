@@ -71,7 +71,13 @@ main = do
   if opts & help
     then printHelpText ""
     else case opts & inFile of
-      Nothing -> printHelpText "  \62497  Missing input file\n"
+      Nothing ->
+        ( case opts & outFile of
+            Nothing ->
+              printHelpText "  \62497  Missing input file and output file\n"
+            Just outputFile ->
+              printHelpText "  \62497  Missing input file\n"
+        )
       Just inputFile ->
         ( case opts & outFile of
             Nothing -> do

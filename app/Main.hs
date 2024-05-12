@@ -74,7 +74,11 @@ main = do
       Nothing -> printHelpText "  \62497  Missing input file\n"
       Just inputFile ->
         ( case opts & outFile of
-            Nothing -> printHelpText "   \62497 Missing output file\n"
+            Nothing -> do
+              fileContent <- readFile inputFile
+              let (_, msg) = rotate fileContent
+                  msgs = lines msg
+              mapM_ putStrLn msgs
             Just outputFile -> do
               fileContent <- readFile inputFile
               let (_, msg) = rotate fileContent

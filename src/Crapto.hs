@@ -1,4 +1,4 @@
-module Crapto (contRotFib, encrapt, decrapt) where
+module Crapto (encraptLines, contRotFib, encrapt, decrapt) where
 
 import qualified Data.Char as Char
 import qualified Data.List as List
@@ -70,6 +70,14 @@ contRotFib fst msg = (fs, List.reverse secret)
       )
       (fst, "")
       msg
+
+encraptLines :: [String] -> (FibState, String)
+encraptLines [] = encrapt ""
+encraptLines (x : xs) =
+  List.foldl
+    (\(fs, acc) line -> let (fst, secret) = contRotFib fs ("\n" <> line) in (fst, acc <> secret))
+    (encrapt x)
+    xs
 
 encrapt :: String -> (FibState, String)
 encrapt = contRotFib (1, 1, First) -- I guess this is where I'd need a dependant type to ensure it's valid

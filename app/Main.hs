@@ -76,8 +76,9 @@ main = do
     else case opts & inFile of
       Nothing ->
         ( case opts & outFile of
-            Nothing ->
-              printHelpText "  \62497  Missing input file and output file\n"
+            Nothing -> do
+              let (fs, _) = rotate ""
+              stdInOut fs
             Just outputFile ->
               printHelpText $ "  \62497  Missing input file, output file = " <> outputFile <> "\n"
         )
@@ -113,3 +114,16 @@ printHelpText msg = do
   putStrLn ("   $ " ++ progName ++ " -i diaryEntry.txt -o secretMessage.txt")
   putStrLn ("   $ " ++ progName ++ " -d -i secretMessage.txt -o message.txt")
   putStrLn "\n"
+
+-- there's a discrepancy here where the `\n` char is added outside of the contRotFib function
+-- so it doesn't progress state line in a file line in.
+-- This is ok as a basic implementatiion but maybe I need to either figure out how to increment
+-- it here or skip it when running through a single string.
+stdInOut ::
+  C.FibState ->
+  IO ()
+stdInOut fs = do
+  line <- getLine
+  let (fs', msg) = C.contRotFib fs line
+  putStrLn msg
+  stdInOut fs'

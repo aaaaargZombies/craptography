@@ -79,8 +79,10 @@ main = do
             Nothing -> do
               let (fs, _) = rotate ""
               stdInOut fs
-            Just outputFile ->
-              printHelpText $ "  \62497  Missing input file, output file = " <> outputFile <> "\n"
+            Just outputFile -> do
+              let (fs, msg) = rotate ""
+              writeFile outputFile msg
+              stdInWriteOut outputFile fs
         )
       Just inputFile ->
         ( case opts & outFile of
@@ -127,3 +129,13 @@ stdInOut fs = do
   let (fs', msg) = C.contRotFib fs line
   putStrLn msg
   stdInOut fs'
+
+stdInWriteOut ::
+  FilePath ->
+  C.FibState ->
+  IO ()
+stdInWriteOut fp fs = do
+  line <- getLine
+  let (fs', msg') = C.contRotFib fs line
+  appendFile fp $ msg' <> "\n"
+  stdInWriteOut fp fs'

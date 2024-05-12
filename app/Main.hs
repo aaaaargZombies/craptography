@@ -79,7 +79,7 @@ main = do
             Nothing ->
               printHelpText "  \62497  Missing input file and output file\n"
             Just outputFile ->
-              printHelpText "  \62497  Missing input file\n"
+              printHelpText $ "  \62497  Missing input file, output file = " <> outputFile <> "\n"
         )
       Just inputFile ->
         ( case opts & outFile of

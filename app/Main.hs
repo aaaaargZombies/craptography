@@ -62,6 +62,9 @@ parseArguments (x : xs) opts = parseArguments xs $ updateOpts x xs opts
 -- to wait for them all to come in then <> and alter that string
 -- Don't really like the idea of that, I'd like to be able to do it
 -- in stream
+--
+-- Progress on this now at https://github.com/aaaaargZombies/craptography/blob/2-std//src/Crapto.hs?plan=1#L41-L72
+-- Example usage in tests at https://github.com/aaaaargZombies/craptography/blob/2-std//test/Spec.hs?plan=1#L11-L17
 
 main :: IO ()
 main = do

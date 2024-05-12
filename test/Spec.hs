@@ -20,8 +20,8 @@ prop_decrapt :: Property
 prop_decrapt =
   property $ do
     xs <- forAll $ Gen.string (Range.linear 0 100) Gen.alpha
-    let (_, _, secret) = C.encrapt xs
-        (_, _, plain) = C.decrapt secret
+    let (_, secret) = C.encrapt xs
+        (_, plain) = C.decrapt secret
     xs === plain
 
 prop_continue :: Property
@@ -29,11 +29,11 @@ prop_continue =
   property $ do
     xs <- forAll $ Gen.string (Range.linear 0 10000) (Gen.choice [Gen.alpha, pure '\n'])
     let
-      (_, _, single) = C.encrapt xs
+      (_, single) = C.encrapt xs
       (h, ts) = Maybe.fromMaybe (xs, []) $ List.uncons $ lines xs
-      (_, _, plural) =
+      (_, plural) =
         List.foldr
-          (\line (l, r, acc) -> let (a, b, secret) = C.contRotFib l r ("\n" <> line) in (a, b, acc <> secret))
+          (\line (fs, acc) -> let (fst, secret) = C.contRotFib fs ("\n" <> line) in (fst, acc <> secret))
           (C.encrapt h)
           ts
     single === plural
@@ -55,5 +55,5 @@ main = do
   hspec $ do
     describe "Crapto" $ do
       it "Should increment each letter alphabetically acording to the fibonacci sequence" $ do
-        let (_, _, secret) = C.encrapt "apl"
+        let (_, secret) = C.encrapt "apl"
         secret `shouldBe` "bqn"

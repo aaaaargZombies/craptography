@@ -10,12 +10,6 @@ import Hedgehog
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 
-prop_reverse :: Property
-prop_reverse =
-  property $ do
-    xs <- forAll $ Gen.list (Range.linear 0 100) Gen.alpha
-    reverse (reverse xs) === xs
-
 prop_decrapt :: Property
 prop_decrapt =
   property $ do
@@ -42,9 +36,8 @@ tests :: IO Bool
 tests =
   checkParallel $
     Group
-      "Test.Example"
-      [ ("prop_reverse", prop_reverse)
-      , ("prop_decrapt", prop_decrapt)
+      "Test.Crapto"
+      [ ("prop_decrapt", prop_decrapt)
       , ("prop_continue", prop_continue)
       ]
 

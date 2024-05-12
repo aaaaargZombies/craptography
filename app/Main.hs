@@ -77,7 +77,7 @@ main = do
             Nothing -> printHelpText "   \62497 Missing output file\n"
             Just outputFile -> do
               fileContent <- readFile inputFile
-              let (_, _, msg) = rotate fileContent
+              let (_, msg) = rotate fileContent
               writeFile outputFile msg
         )
 

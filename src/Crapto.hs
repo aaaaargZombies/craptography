@@ -1,8 +1,9 @@
-module Crapto (contRotFib, encrapt, decrapt) where
+module Crapto (contRotFib, encrapt, decrapt, FibState) where
 
 import qualified Data.Char as Char
 import qualified Data.List as List
 import qualified Data.Maybe as Maybe
+import Data.Monoid (First)
 
 {-
  Describes the starting Char and length of the set
@@ -37,25 +38,41 @@ rotChar n ch
   | Char.isDigit ch = digitRot n ch
   | otherwise = ch
 
-contRotFib :: Int -> Int -> String -> (Int, Int, String)
-contRotFib a b [] = (a, b, "")
-contRotFib a b msg = (r, l + r, List.reverse secret)
+data FibPos
+  = First
+  | Second
+  | Cont
+  deriving (Eq, Show)
+
+type FibState = (Int, Int, FibPos)
+
+contRotFib :: FibState -> String -> (FibState, String)
+contRotFib fs [] = (fs, "")
+contRotFib fst msg = (fs, List.reverse secret)
  where
-  (h, t) = Maybe.fromMaybe ('a', "") $ List.uncons msg
-  left = a
-  right = b
-  (l, r, secret) =
+  (fs, secret) =
     List.foldl
-      ( \(l, r, acc) char ->
-          let n = l + r
-              c = rotChar n char
-           in (r, n, c : acc)
+      ( \((l, r, fp), acc) char ->
+          case fp of
+            First ->
+              -- fib 1 = 1
+              let c = rotChar r char
+               in ((l, r, Second), c : acc)
+            Second ->
+              -- fib 2 = 1
+              let c = rotChar r char
+               in ((l, r, Cont), c : acc)
+            Cont ->
+              -- fib n = (fib n -1) + (fib n -2)
+              let n = l + r
+                  c = rotChar n char
+               in ((r, n, Cont), c : acc)
       )
-      (left, right, [rotChar b h])
-      t
+      (fst, "")
+      msg
 
-encrapt :: String -> (Int, Int, String)
-encrapt = contRotFib 0 1
+encrapt :: String -> (FibState, String)
+encrapt = contRotFib (1, 1, First) -- I guess this is where I'd need a dependant type to ensure it's valid
 
-decrapt :: String -> (Int, Int, String)
-decrapt = contRotFib 0 (-1)
+decrapt :: String -> (FibState, String)
+decrapt = contRotFib (-1, -1, First)

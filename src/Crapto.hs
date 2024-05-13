@@ -2,8 +2,6 @@ module Crapto (contRotFib, encrapt, decrapt, FibState) where
 
 import qualified Data.Char as Char
 import qualified Data.List as List
-import qualified Data.Maybe as Maybe
-import Data.Monoid (First)
 
 {-
  Describes the starting Char and length of the set

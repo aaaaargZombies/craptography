@@ -53,20 +53,23 @@ contRotFib fst msg = (fs, List.reverse secret)
   (fs, secret) =
     List.foldl
       ( \((l, r, fp), acc) char ->
-          case fp of
-            First ->
-              -- fib 1 = 1
-              let c = rotChar r char
-               in ((l, r, Second), c : acc)
-            Second ->
-              -- fib 2 = 1
-              let c = rotChar r char
-               in ((l, r, Cont), c : acc)
-            Cont ->
-              -- fib n = (fib n -1) + (fib n -2)
-              let n = l + r
-                  c = rotChar n char
-               in ((r, n, Cont), c : acc)
+          -- skip newslines so stdin behaves the same as reading from textfile
+          if char == '\n'
+            then ((l, r, fp), char : acc)
+            else case fp of
+              First ->
+                -- fib 1 = 1
+                let c = rotChar r char
+                 in ((l, r, Second), c : acc)
+              Second ->
+                -- fib 2 = 1
+                let c = rotChar r char
+                 in ((l, r, Cont), c : acc)
+              Cont ->
+                -- fib n = (fib n -1) + (fib n -2)
+                let n = l + r
+                    c = rotChar n char
+                 in ((r, n, Cont), c : acc)
       )
       (fst, "")
       msg

@@ -2,6 +2,7 @@ module Main (main) where
 
 import qualified Crapto as C
 import Data.Function ((&))
+import GHC.IO.Handle (isEOF)
 import System.Environment
 
 data Opts = Opts
@@ -125,17 +126,25 @@ stdInOut ::
   C.FibState ->
   IO ()
 stdInOut fs = do
-  line <- getLine
-  let (fs', msg) = C.contRotFib fs line
-  putStrLn msg
-  stdInOut fs'
+  end <- isEOF
+  if end
+    then return ()
+    else do
+      line <- getLine
+      let (fs', msg) = C.contRotFib fs line
+      putStrLn msg
+      stdInOut fs'
 
 stdInWriteOut ::
   FilePath ->
   C.FibState ->
   IO ()
 stdInWriteOut fp fs = do
-  line <- getLine
-  let (fs', msg') = C.contRotFib fs line
-  appendFile fp $ msg' <> "\n"
-  stdInWriteOut fp fs'
+  end <- isEOF
+  if end
+    then return ()
+    else do
+      line <- getLine
+      let (fs', msg') = C.contRotFib fs line
+      appendFile fp $ msg' <> "\n"
+      stdInWriteOut fp fs'

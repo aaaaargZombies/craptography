@@ -76,28 +76,6 @@ parseArguments (x : xs) opts = parseArguments xs $ updateOpts x xs opts
       "--decrapt" -> opts{decrapt = True}
       _ -> opts
 
-printHelpText :: String -> IO ()
-printHelpText msg = do
-  putStrLn "\n"
-  putStrLn msg
-  progName <- getProgName
-  putStrLn (" Usage: " ++ progName ++ " <options>")
-  putStrLn "\n"
-  putStrLn " Options:"
-  putStrLn "   --decrapt | -d        - Runs the encraption in reverse"
-  putStrLn "   --input   | -i        - Path to file you would like to encrapt"
-  putStrLn "             :             if not specified reads from stdin"
-  putStrLn "   --output  | -o        - Path to file you would like to the write result"
-  putStrLn "             :             if not specified writes to stdout"
-  putStrLn "   --help    | -h        - Show this help text"
-  putStrLn "\n"
-  putStrLn " Examples:"
-  putStrLn ("   $ " ++ progName ++ " -i diaryEntry.txt -o secretMessage.txt")
-  putStrLn ("   $ " ++ progName ++ " -d -i secretMessage.txt -o message.txt")
-  putStrLn ("   $ cat diaryEntry.txt | " ++ progName ++ " -o secretMessage.txt")
-  putStrLn ("   $ " ++ progName ++ " -d -i secretMessage.txt")
-  putStrLn "\n"
-
 stdInOut ::
   C.FibState ->
   IO ()
@@ -124,3 +102,25 @@ stdInWriteOut fp fs = do
       let (fs', msg') = C.contRotFib fs line
       appendFile fp $ msg' <> "\n"
       stdInWriteOut fp fs'
+
+printHelpText :: String -> IO ()
+printHelpText msg = do
+  putStrLn "\n"
+  putStrLn msg
+  progName <- getProgName
+  putStrLn (" Usage: " ++ progName ++ " <options>")
+  putStrLn "\n"
+  putStrLn " Options:"
+  putStrLn "   --decrapt | -d        - Runs the encraption in reverse"
+  putStrLn "   --input   | -i        - Path to file you would like to encrapt"
+  putStrLn "             :             if not specified reads from stdin"
+  putStrLn "   --output  | -o        - Path to file you would like to the write result"
+  putStrLn "             :             if not specified writes to stdout"
+  putStrLn "   --help    | -h        - Show this help text"
+  putStrLn "\n"
+  putStrLn " Examples:"
+  putStrLn ("   $ " ++ progName ++ " -i diaryEntry.txt -o secretMessage.txt")
+  putStrLn ("   $ " ++ progName ++ " -d -i secretMessage.txt -o message.txt")
+  putStrLn ("   $ cat diaryEntry.txt | " ++ progName ++ " -o secretMessage.txt")
+  putStrLn ("   $ " ++ progName ++ " -d -i secretMessage.txt")
+  putStrLn "\n"

@@ -116,6 +116,8 @@ printHelpText msg = do
   putStrLn " Examples:"
   putStrLn ("   $ " ++ progName ++ " -i diaryEntry.txt -o secretMessage.txt")
   putStrLn ("   $ " ++ progName ++ " -d -i secretMessage.txt -o message.txt")
+  putStrLn ("   $ cat diaryEntry.txt | " ++ progName ++ " -o secretMessage.txt")
+  putStrLn ("   $ " ++ progName ++ " -d -i secretMessage.txt")
   putStrLn "\n"
 
 -- there's a discrepancy here where the `\n` char is added outside of the contRotFib function

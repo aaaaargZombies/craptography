@@ -44,6 +44,12 @@ data FibPos
 
 type FibState = (Int, Int, FibPos)
 
+baseIncrement :: FibState
+baseIncrement = (1, 1, First)
+
+baseDecrement :: FibState
+baseDecrement = (-1, -1, First)
+
 contRotFib :: FibState -> String -> (FibState, String)
 contRotFib fs [] = (fs, "")
 contRotFib fst msg = (fs, List.reverse secret)
@@ -73,7 +79,7 @@ contRotFib fst msg = (fs, List.reverse secret)
       msg
 
 encrapt :: String -> (FibState, String)
-encrapt = contRotFib (1, 1, First) -- I guess this is where I'd need a dependant type to ensure it's valid
+encrapt = contRotFib baseIncrement
 
 decrapt :: String -> (FibState, String)
-decrapt = contRotFib (-1, -1, First)
+decrapt = contRotFib baseDecrement

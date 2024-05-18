@@ -15,6 +15,9 @@
 
 name: Release
 
+permissions:
+  contents: write
+
 on:
   release:
     types: [published]
@@ -36,51 +39,39 @@ jobs:
       - name: Setup Haskell
         uses: haskell-actions/setup@v2
         with:
-          ghc-version: '9.4.8' # Exact version of ghc to use
-          # cabal-version: '2.2' # if not set defaults to latest
+          ghc-version: '9.4.8' 
           enable-stack: true
           stack-version: '2.13.1'
 
-# why does the windows-latest ${{runner.os}} == Linux is it my machine explains why the envs wasn't working for linux...
-# working on gh not on my machine with `act`
-      - name: "Sign of life" 
-        run: |
-          echo "✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨"
-          echo ${{runner.os}} 
-
       - name: "Build the proj with stack"
         run: |
-          mkdir dist
-          stack build --local-bin-path dist --copy-bins
+          stack build --local-bin-path . --copy-bins
 
       - if: matrix.os == 'windows-latest'
         name: "Rename binary"
         run: |
-          mv ./dist/craptography-exe ./dist/craptography-${{matrix.os}}-${{github.ref_name}}.exe
-
+          mv craptography-exe.exe craptography-${{runner.os}}-${{github.ref_name}}.exe
 
       - if: matrix.os != 'windows-latest'
         name: "Rename binary"
         run: |
-          mv ./dist/craptography-exe ./dist/craptography-${{matrix.os}}-${{github.ref_name}}
+          mv craptography-exe craptography-${{runner.os}}-${{github.ref_name}}
 
       - if: matrix.os == 'windows-latest'
         name: Set binary path name on Windows
-        run: echo "BINARY_PATH=./dist/craptography-${{matrix.os}}-${{github.ref_name}}.exe" >> $env:GITHUB_ENV
+        run: echo "BINARY_PATH=craptography-${{runner.os}}-${{github.ref_name}}.exe" >> $env:GITHUB_ENV
 
       - if: matrix.os != 'windows-latest'
         name: Set binary path name not on Windows
-        run: echo "BINARY_PATH=./dist/craptography-${{matrix.os}}-${{github.ref_name}}" >> $GITHUB_ENV
+        run: echo "BINARY_PATH=craptography-${{runner.os}}-${{github.ref_name}}" >> $GITHUB_ENV
 
       - name: Compress binary
         uses: svenstaro/upx-action@2.4.0
         with:
-          file: ${{ env.BINARY_PATH }}
+          files: ${{ env.BINARY_PATH }}
 
       - name: upload artifacts
         uses: softprops/action-gh-release@v2
-        if: steps.release.outputs.release_created
         with:
           tag_name: ${{ github.ref_name }}
           files: ${{ env.BINARY_PATH }}
-

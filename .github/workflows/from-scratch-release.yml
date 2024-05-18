@@ -1,3 +1,18 @@
+# Note [environment variables]
+#
+# It seems absurd, but the syntax for creating environment variables
+# differs between Windows and Linux/MacOS.  See
+#
+# https://docs.github.com/en/actions/learn-github-actions/variables
+#
+# In Linux/MacOS we have to use
+#
+# run: echo "VARNAME=content" >> "$GITHUB_ENV"
+#
+# whereas in Windows we have to use
+#
+# run: echo "VARNAME=content" >> $env:GITHUB_ENV
+
 name: Release
 
 on:
@@ -26,7 +41,9 @@ jobs:
           enable-stack: true
           stack-version: '2.13.1'
 
-      - name: "Sign of life" # why does the windows-latest ${{runner.os}} == Linux is it my machine explains why the envs wasn't working for linux
+# why does the windows-latest ${{runner.os}} == Linux is it my machine explains why the envs wasn't working for linux...
+# working on gh not on my machine with `act`
+      - name: "Sign of life" 
         run: |
           echo "✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨"
           echo ${{runner.os}} 
@@ -49,7 +66,7 @@ jobs:
 
       - if: matrix.os == 'windows-latest'
         name: Set binary path name on Windows
-        run: echo "BINARY_PATH=./dist/craptography-${{matrix.os}}-${{github.ref_name}}.exe" >> $GITHUB_ENV
+        run: echo "BINARY_PATH=./dist/craptography-${{matrix.os}}-${{github.ref_name}}.exe" >> $env:GITHUB_ENV
 
       - if: matrix.os != 'windows-latest'
         name: Set binary path name not on Windows

@@ -27,12 +27,12 @@ The project haskell code is formatted using  [`ormolu`](https://hackage.haskell.
 
 ## Usage
 
-Currently the project does not provide binary releases so it will need to be downloaded and built or run with `stack` as per development.
+Download the binary for your OS from the [latest release](https://github.com/aaaaargZombies/craptography/releases/latest) or build from source following the development instructions above.
 
 ```sh
-$ stack run -- --help
+$  ./craptography-Linux-v0.0.1  -- --help
 
- Usage: craptography-exe <options>
+ Usage:  craptography-Linux-v0.0.1  <options>
 
 
  Options:
@@ -45,8 +45,8 @@ $ stack run -- --help
 
 
  Examples:
-   $ craptography-exe -i diaryEntry.txt -o secretMessage.txt
-   $ craptography-exe -d -i secretMessage.txt -o message.txt
-   $ cat diaryEntry.txt | craptography-exe -o secretMessage.txt
-   $ craptography-exe -d -i secretMessage.txt
+   $ craptography-Linux-v0.0.1  -i diaryEntry.txt -o secretMessage.txt
+   $ craptography-Linux-v0.0.1  -d -i secretMessage.txt -o message.txt
+   $ cat diaryEntry.txt |  craptography-Linux-v0.0.1  -o secretMessage.txt
+   $ craptography-Linux-v0.0.1  -d -i secretMessage.txt
 ```

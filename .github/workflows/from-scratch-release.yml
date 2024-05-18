@@ -26,8 +26,10 @@ jobs:
           enable-stack: true
           stack-version: '2.13.1'
 
-      - name: "Sign of life"
-        run: echo "✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨"
+      - name: "Sign of life" # why does the windows-latest ${{runner.os}} == Linux is it my machine explains why the envs wasn't working for linux
+        run: |
+          echo "✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨"
+          echo ${{runner.os}} 
 
       - name: "Build the proj with stack"
         run: |
@@ -37,39 +39,31 @@ jobs:
       - if: matrix.os == 'windows-latest'
         name: "Rename binary"
         run: |
-          mv ./dist/craptography-exe ./dist/craptography.exe
+          mv ./dist/craptography-exe ./dist/craptography-${{matrix.os}}-${{github.ref_name}}.exe
 
 
       - if: matrix.os != 'windows-latest'
         name: "Rename binary"
         run: |
-          mv ./dist/craptography-exe ./dist/craptography
+          mv ./dist/craptography-exe ./dist/craptography-${{matrix.os}}-${{github.ref_name}}
 
       - if: matrix.os == 'windows-latest'
         name: Set binary path name on Windows
-        run: echo "BINARY_PATH=./dist/craptography.exe" >> $GITHUB_ENV
+        run: echo "BINARY_PATH=./dist/craptography-${{matrix.os}}-${{github.ref_name}}.exe" >> $GITHUB_ENV
 
       - if: matrix.os != 'windows-latest'
         name: Set binary path name not on Windows
-        run: echo "BINARY_PATH=./dist/craptography" >> $GITHUB_ENV
-
-
-      - name: "Check binary size before"
-        run: |
-          echo "🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴"
-          ls -l dist
-
-      - name: "Check envs"
-        run: |
-          echo "🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣"
-          env
+        run: echo "BINARY_PATH=./dist/craptography-${{matrix.os}}-${{github.ref_name}}" >> $GITHUB_ENV
 
       - name: Compress binary
         uses: svenstaro/upx-action@2.4.0
         with:
           file: ${{ env.BINARY_PATH }}
 
-      - name: "Check binary size after"
-        run: |
-          echo "🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢"
-          ls -l dist
+      - name: upload artifacts
+        uses: softprops/action-gh-release@v2
+        if: steps.release.outputs.release_created
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: ${{ env.BINARY_PATH }}
+

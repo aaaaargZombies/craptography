@@ -1,0 +1,93 @@
+# Note [environment variables]
+#
+# It seems absurd, but the syntax for creating environment variables
+# differs between Windows and Linux/MacOS.  See
+#
+# https://docs.github.com/en/actions/learn-github-actions/variables
+#
+# In Linux/MacOS we have to use
+#
+# run: echo "VARNAME=content" >> "$GITHUB_ENV"
+#
+# whereas in Windows we have to use
+#
+# run: echo "VARNAME=content" >> $env:GITHUB_ENV
+
+
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  built_artifact:
+    name: ${{ matrix.os }}/GHC 9.4.8/${{ github.ref }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # Don't fail fast because we test a lot of versions and it's
+      # good to know which ones work and which ones don't
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup Haskell
+        uses: haskell-actions/setup@v2
+        with:
+          ghc-version: '9.4.8' # Exact version of ghc to use
+          # cabal-version: '2.2' # if not set defaults to latest
+          enable-stack: true
+          stack-version: '2.13.1'
+
+      - name: "Sign of life"
+        run: echo "✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨"
+
+      - name: "Build the proj with stack"
+        run: |
+          mkdir dist
+          stack build --local-bin-path dist --copy-bins
+
+      - if: matrix.os == 'windows-latest'
+        name: "Rename binary"
+        run: |
+          mv ./dist/craptography-exe ./dist/craptography.exe
+
+
+      - if: matrix.os != 'windows-latest'
+        name: "Rename binary"
+        run: |
+          mv ./dist/craptography-exe ./dist/craptography
+
+      # See Note [environment variables]
+      - if: matrix.os == 'windows-latest'
+        name: Set binary path name on Windows
+        run: echo "BINARY_PATH=./dist/craptography.exe" >> $GITHUB_ENV
+
+      # See Note [environment variables]
+      - if: matrix.os != 'windows-latest'
+        name: Set binary path name not on Windows
+        run: echo "BINARY_PATH=./dist/craptography" >> $GITHUB_ENV
+
+
+      - name: "Check binary size before"
+        run: |
+          echo "🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴"
+          ls -l dist
+
+      - name: "Check envs"
+        run: |
+          echo "🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣"
+          env
+
+      - name: Compress binary
+        uses: svenstaro/upx-action@2.4.0
+        with:
+          file: ${{ env.BINARY_PATH }}
+
+      - name: "Check binary size after"
+        run: |
+          echo "🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢"
+          ls -l dist

@@ -36,6 +36,9 @@ rotChar n ch
   | Char.isDigit ch = digitRot n ch
   | otherwise = ch
 
+fibs :: [Integer]
+fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
+
 data FibPos
   = First
   | Second
